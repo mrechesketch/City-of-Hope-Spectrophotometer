@@ -1,5 +1,48 @@
 import os
 
+class TableCreator:
+
+    def __init__(self, wavelength):
+        """
+        the divider string between header and data is the same for either 
+        the 1064 or 785 system. Their relative wavenumber ranges are not.
+        """
+        self.dividerString_ = "\nPixel"
+        if wavelength == 785:
+            self.START = 177
+            self.END = 1980
+        if wavelength == 1064:
+            self.START = 58
+            self.END = 486
+        """
+        indices of ramanshift, dark and raw data are invariant. The indices
+        refer to the column position of the data vector
+        """
+        self.RAMANSHIFT = 3
+        self.DARK = 4
+        self.RAWDATA = 6
+        """
+        locations and files start as empty lists 
+        """
+        self.locations = []
+        self.files = [] 
+
+    
+    def createTable(name):
+        """
+        user provides the location of a folder containing text files and 
+        these are reduced to a single table
+        """
+        return 0
+
+    def addLocation(locationString):
+        return 0
+
+
+            
+
+
+
 STARTFORDATA = "\nPixel"
 
 STARTFOR785 = 177 # 176 is start index on txt
