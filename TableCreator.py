@@ -4,10 +4,13 @@ class TableCreator:
 
     def __init__(self, wavelength):
         """
-        the divider string between header and data is the same for either 
-        the 1064 or 785 system. Their relative wavenumber ranges are not.
+        The divider string between header and data is the same for either 
+        the 1064 or 785 system.
         """
         self.dividerString_ = "\nPixel"
+        """
+        Their relative wavenumber ranges are not.
+        """
         if wavelength == 785:
             self.START = 177
             self.END = 1980
@@ -15,28 +18,153 @@ class TableCreator:
             self.START = 58
             self.END = 486
         """
-        indices of ramanshift, dark and raw data are invariant. The indices
+        Indices of ramanshift, dark and raw data are invariant. The indices
         refer to the column position of the data vector
         """
         self.RAMANSHIFT = 3
         self.DARK = 4
         self.RAWDATA = 6
         """
-        locations and files start as empty lists 
+        Locations and files start as empty strings 
         """
-        self.locations = []
-        self.files = [] 
+        self.location = ""
+        self.files = ""
 
-    
-    def createTable(name):
+    # Public Methods 
+    def go(name):
         """
-        user provides the location of a folder containing text files and 
-        these are reduced to a single table
+        User provides the name of the tables to be created
         """
-        return 0
+        sampleDay = os.listdir(desktopLoc)
+        lDList = map(lambda x: processExp(getData(x)), sampleDay)
+        zz = reduce(combineData, lDList)
+        commaSeparatedElements = LOLToCSV(zz)
+        writeString = titleString(dateString) + restString(commaSeparatedElements) 
+        f = open(dateString + "Data.txt", 'w')
+        f.write(writeString)
+        f.close()
+        return
 
     def addLocation(locationString):
-        return 0
+        """
+        Add the location of files to be reduced
+        """
+        self.location = locationString
+        addFiles(locationString)
+        return
+
+    def addFiles(locationString):
+        """
+        Filter the files so only text files are reduced
+        """
+        allFiles = os.listdir(dataFolder)
+        self.files = filter(lambda x: ".txt" in x, allFiles)
+        return
+
+    #Private Methods
+
+    def dataOrHeader(name, doH):
+        """
+        Return either the second half (data, dOH==True) or
+        first half of string (header, dOH==False)
+        """
+        f = open(self.location + "\\" + name)
+        r = f.read()
+        f.close()
+        index = r.find(self.dividerString_)
+        dataOrHeader = r[index+1:len(r)] if doH else r[0:index] 
+        return dataOrHeader
+    
+    def getData(name):
+        return dataOrHeader(name, True)
+
+    def getHeader(name):
+        return dataOrHeader(name, False)
+
+    def listOfListData(dataString):
+        splitLines = dataString.split("\n")
+        return map(lambda x: x.split(";")[:-1], splitLines)[:-1]
+
+    def lolHeader(headerString):
+        lineSplit = headerString.split("\n")
+        return map(lambda x: x.split(";"), lineSplit)
+
+    def getVector(DataIndex, LOLData):
+        return map(lambda x: x[DataIndex], LOLData)
+
+    def getRaman(LOLData):
+        return getVector(RAMANSHIFT, LOLData)
+
+    def getDark(LOLData):
+        return getVector(DARK, LOLData)
+
+    def getRaw(LOLData):
+        return getVector(RAWDATA, LOLData)
+
+    def processExp(ExpData):
+        """
+        This method takes in the data string and performs some
+        light processing. The dark signal is subtracted from the
+        response and the raman shift is zipped to this resulting value
+        """
+        LOLData = listOfListData(ExpData)
+        raman = getRaman(LOLData)[self.START:self.END]
+        dark = getDark(LOLData)[self.START:self.END]
+        raw = getRaw(LOLData)[self.START:self.END]
+        dataSeries = map(lambda x,y: str(float(x)-float(y)), raw,dark)
+        #r = map(lambda x: x, raman)
+        return map(lambda x: [x[0],x[1]], zip(raman, dataSeries))
+
+    def combineData(dataLOLA, dataLOLB):
+        """
+        Every file has a common raman shift we only 
+        really need to include it from the first one (that's why
+        x[1][1] is appended and not x[1][0]!)
+        """
+        map(lambda x: x[0].append(x[1][1]), zip(dataLOLA, dataLOLB))
+        return dataLOLA
+
+
+    def LoLToCSV(LoL):
+        """
+        Convert a list of lists into a list where each element is one
+        long string and values are separated by a comma
+        """
+        return map(lambda x: reduce(lambda a,b: a+','+b, x),LoL)
+
+    def titleString():
+        titles = reduce(lambda x,y: x + "," + y, self.files)
+        return "Raman Shift," + titles + "\n"
+
+
+    def restString(LOLCSV):
+        rest = reduce(lambda x,y: x + "\n" + y, LOLCSV)
+        return rest
+
+    def createTable(userName, doH):
+        lList = map(lambda x: processExp(getData(x)), self.files) if dOH
+        else map(lambda x: lolHeader(getHeader(x)), self.files)
+        # this method is kinda magic
+        zz = reduce(combineData, lList)
+        commaSeparatedElements = LOLToCSV(zz)
+        writeString = titleString() + restString(commaSeparatedElements)
+        extension = "Data.txt" if doH else "Header.txt"
+        f = open(userName + extension, 'w')
+        f.write(writeString)
+        f.close()
+        return
+
+    def createDataTable(userName):
+        createTable(userName, True)
+        return
+
+    def createHeaderTable(userName):
+        createTable(userName, False)
+        return
+
+
+    
+
 
 
             
