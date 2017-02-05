@@ -63,7 +63,9 @@ class TableCreator:
         r = f.read()
         f.close()
         index = r.find(self.dividerString_)
-        dataOrHeader = r[index+1:len(r)] if doH else r[0:index] 
+        dataOrHeader = r[index+1:len(r)] if doH else r[0:index]
+        #hacky fix for random \r
+        dataOrHeader = dataOrHeader.replace("\r", "") 
         return dataOrHeader
     
     def getData(self, name):
@@ -77,7 +79,7 @@ class TableCreator:
         return map(lambda x: x.split(";")[:-1], splitLines)[:-1]
 
     def lolHeader(self, headerString):
-        lineSplit = headerString.split("\r\n")
+        lineSplit = headerString.split("\n")
         return map(lambda x: x.split(";"), lineSplit)
 
     def getVector(self, DataIndex, LOLData):
@@ -154,6 +156,6 @@ class TableCreator:
         self.createTable(userName, False)
         return
 
-d = TableCreator(785)
+d = TableCreator(1064)
 d.addLocation("/Users/alexanderechevarria/Desktop/Microscope Nov 21")
 d.createTables("poop")
