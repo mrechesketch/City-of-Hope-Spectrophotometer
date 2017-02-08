@@ -59,7 +59,7 @@ class TableCreator:
         Return either the second half (data, dOH==True) or
         first half of string (header, dOH==False)
         """
-        f = open(self.location + "/" + name)
+        f = open(self.location + "\\" + name)
         r = f.read()
         f.close()
         index = r.find(self.dividerString_)
