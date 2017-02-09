@@ -41,13 +41,13 @@ classdef IndexCrawler
         
         
         
-        
+        % this is the heavy lifter for accessing the sheet and crawling!
         function logHeadOrData = GetAtIndex(IC, index)
             %GETATINDEX - gets log, header or header from a certain date
             logHeadOrData = GetGoogleSpreadsheet(IC.indexSheet{IC.dateRow, index});
         end
         
-        
+        % wrapper functions for above.. cells of strings
         function data = getData(IC)
             data = IC.GetAtIndex(IC.dataIndex);
         end
@@ -58,9 +58,35 @@ classdef IndexCrawler
             log = IC.GetAtIndex(IC.logIndex);
         end
         
+        % processes the cell into a matrix
+        function dataMat = getDataMatrix(IC)
+            data = IC.getData();
+            numCell = data(2:end,1:end);
+            numCellSize = size(numCell);
+            for i= 1:numCellSize(1)*numCellSize(2)
+                numCell{i} = str2num(numCell{i});
+            end
+            dataMat = cell2mat(numCell);
+        end
         
-        
+        % get data matrix of normalized vectors!
+        function normDataMat = getNormMatrix(IC)
+            normDataMat = IC.getDataMatrix();
+            dataMatSize = size(normDataMat);
+            for i = 2:dataMatSize(2)
+                starts = (dataMatSize(1)*(i-1))+1;
+                ends = dataMatSize(1)*i;
+                currentVector = normDataMat(starts:ends);
+                cvsum = sum(currentVector);
+                normDataMat(starts:ends) = currentVector./cvsum;
+            end
+        end
     end
     
+    
+    
+    
+    
 end
+
 
