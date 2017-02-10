@@ -6,9 +6,6 @@ class TableCreator:
         """
         The divider string between header and data is the same for either 
         the 1064 or 785 system.
-
-
-        
         """
         self.dividerString_ = "\nPixel"
         """
@@ -19,7 +16,7 @@ class TableCreator:
             self.END = 1980
         if wavelength == 1064:
             self.START = 58
-            self.END = 486
+            self.END = 486 
         """
         Indices of ramanshift, dark and raw data are invariant. The indices
         refer to the column position of the data vector
