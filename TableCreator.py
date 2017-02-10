@@ -6,6 +6,9 @@ class TableCreator:
         """
         The divider string between header and data is the same for either 
         the 1064 or 785 system.
+
+
+        
         """
         self.dividerString_ = "\nPixel"
         """
