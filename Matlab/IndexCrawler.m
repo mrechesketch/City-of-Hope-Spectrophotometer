@@ -77,10 +77,11 @@ classdef IndexCrawler
                 starts = (dataMatSize(1)*(i-1))+1;
                 ends = dataMatSize(1)*i;
                 currentVector = normDataMat(starts:ends);
-                cvsum = sum(currentVector);
-                normDataMat(starts:ends) = currentVector./cvsum;
+                normDataMat(starts:ends) = currentVector./sum(currentVector);
             end
         end
+        
+        
     end
     
     
