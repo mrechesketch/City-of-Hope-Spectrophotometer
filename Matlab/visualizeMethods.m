@@ -10,6 +10,7 @@ ds = ic.getDataSet();
 [normCorr, cnfactors] = ds.applyProcess(corr, 'norm');
 
 % select vectors
+x = ds.x;
     % unprocessed
 healthys = ds.data(1:end, 2:29);
 tumors = ds.data(1:end, 30:end);
