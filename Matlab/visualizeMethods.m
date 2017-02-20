@@ -34,9 +34,17 @@ healthyNCorr = mean(healthysNCorr, 2);
 
 % plot
 figure;
+subplot(3,1,1);
 plot(x, tumor, 'color', 'r'); hold on;
 plot(x, healthy, 'color', 'b'); hold on;
+title('No Processing');
+
+subplot(3,1,2);
 plot(x, tumorCorr, 'color', 'm'); hold on;
-plot(x, healthyCorr, 'color', 'k'); %hold on;
-% plot(x, tumorSubNorm, 'color', 'c'); hold on;
-% plot(x, healthySubNorm, 'color', 'g');
+plot(x, healthyCorr, 'color', 'k'); hold on;
+title('Flourescence Correction');
+
+subplot(3,1,3);
+plot(x, tumorNCorr, 'color', 'c'); hold on;
+plot(x, healthyNCorr, 'color', 'g');
+title('Normalized');
