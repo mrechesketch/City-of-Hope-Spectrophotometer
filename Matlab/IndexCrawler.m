@@ -1,6 +1,5 @@
 classdef IndexCrawler
-    %Because MATLAB won't let you define >1 visible function...
-    %   Detailed explanation goes here
+    % Access indexed data
     
     properties
         % gather the google sheet
@@ -30,7 +29,7 @@ classdef IndexCrawler
             indexSheetSize = size(IC.indexSheet);
             while ~strcmp(IC.indexSheet{IC.dateRow},date)
                 IC.dateRow = 1 + IC.dateRow;
-                if IC.dateRow >= indexSheetSize(1)
+                if IC.dateRow > indexSheetSize(1)
                     disp('Date invalid');
                     IC.dateRow = 0;
                     IC.date = 'invalid';
@@ -48,7 +47,7 @@ classdef IndexCrawler
         end
         
         % wrapper functions for above.. cells of strings
-        function data = getData(IC)
+        function data = getDataStr(IC)
             data = IC.GetAtIndex(IC.dataIndex);
         end
         function header = GetHeader(IC)
@@ -57,30 +56,15 @@ classdef IndexCrawler
         function log = GetLog(IC)
             log = IC.GetAtIndex(IC.logIndex);
         end
-        
-        % processes the cell into a matrix
-        function dataMat = getDataMatrix(IC)
-            data = IC.getData();
-            numCell = data(2:end,1:end);
-            numCellSize = size(numCell);
-            for i= 1:numCellSize(1)*numCellSize(2)
-                numCell{i} = str2num(numCell{i});
-            end
-            dataMat = cell2mat(numCell);
+
+        % get a data set object
+        function DS = getDataSet(IC)
+            dataStr = IC.getDataStr();
+            DS = DataSet(dataStr);
         end
         
-        % get data matrix of normalized vectors!
-        function normDataMat = getNormMatrix(IC)
-            normDataMat = IC.getDataMatrix();
-            dataMatSize = size(normDataMat);
-            for i = 2:dataMatSize(2)
-                starts = (dataMatSize(1)*(i-1))+1;
-                ends = dataMatSize(1)*i;
-                currentVector = normDataMat(starts:ends);
-                cvsum = sum(currentVector);
-                normDataMat(starts:ends) = currentVector./cvsum;
-            end
-        end
+        
+        
     end
     
     

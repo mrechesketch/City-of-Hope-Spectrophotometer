@@ -12,8 +12,8 @@ class TableCreator:
         Their relative wavenumber ranges are not.
         """
         if wavelength == 785:
-            self.START = 177
-            self.END = 1980
+            self.START = 182
+            self.END = 1986
         if wavelength == 1064:
             self.START = 58
             self.END = 486 
@@ -156,6 +156,6 @@ class TableCreator:
         self.createTable(userName, False)
         return
 
-d = TableCreator(1064)
-d.addLocation("/Users/alexanderechevarria/Desktop/Microscope Nov 21")
-d.createTables("poop")
+d = TableCreator(785)
+d.addLocation("/Users/alexanderechevarria/Desktop/feb17")
+d.createTables("Feb17")
