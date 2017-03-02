@@ -16,7 +16,7 @@ class TableCreator:
             self.END = 1986
         if wavelength == 1064:
             self.START = 58
-            self.END = 486
+            self.END = 486 
         """
         Indices of ramanshift, dark and raw data are invariant. The indices
         refer to the column position of the data vector
@@ -59,7 +59,7 @@ class TableCreator:
         Return either the second half (data, dOH==True) or
         first half of string (header, dOH==False)
         """
-        f = open(self.location + "\\" + name)
+        f = open(self.location + "/" + name)
         r = f.read()
         f.close()
         index = r.find(self.dividerString_)
@@ -157,5 +157,5 @@ class TableCreator:
         return
 
 d = TableCreator(785)
-d.addLocation("/Users/alexanderechevarria/Desktop/feb17")
-d.createTables("Feb17")
+d.addLocation("/Users/alexanderechevarria/Desktop/day3")
+d.createTables("Feb24")

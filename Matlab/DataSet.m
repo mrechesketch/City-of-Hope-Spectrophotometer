@@ -54,10 +54,11 @@ classdef DataSet
             % output: transformed data set and factors associated
         function [transformed, factors] = applyProcess(DS, data, type)
             transformed = data;
-            factors = zeros([1,DS.width]);
-            for i = 1:DS.width
-                starts = (DS.height*(i-1))+1;
-                ends = DS.height*i;
+            [h, w] = size(data);
+            factors = zeros([1,w]);
+            for i = 1:w
+                starts = (h*(i-1))+1;
+                ends = h*i;
                 currentVector = transformed(starts:ends);
                 % make the choice on type
                 if strcmp(type, 'corr')

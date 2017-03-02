@@ -10,6 +10,7 @@ ds = ic.getDataSet();
 [normCorr, cnfactors] = ds.applyProcess(corr, 'norm');
 
 % select vectors
+x = ds.x;
     % unprocessed
 healthys = ds.data(1:end, 2:29);
 tumors = ds.data(1:end, 30:end);
@@ -33,9 +34,17 @@ healthyNCorr = mean(healthysNCorr, 2);
 
 % plot
 figure;
-plot(x, tumor, 'color', 'r'); hold on;
-plot(x, healthy, 'color', 'b'); hold on;
-plot(x, tumorCorr, 'color', 'm'); hold on;
-plot(x, healthyCorr, 'color', 'k'); %hold on;
-% plot(x, tumorSubNorm, 'color', 'c'); hold on;
-% plot(x, healthySubNorm, 'color', 'g');
+% subplot(3,1,1);
+% plot(x, tumor, 'color', 'r'); hold on;
+% plot(x, healthy, 'color', 'b'); hold on;
+% title('No Processing');
+
+% subplot(3,1,2);
+% plot(x, tumorCorr, 'color', 'm'); hold on;
+% plot(x, healthyCorr, 'color', 'k'); hold on;
+% title('Flourescence Correction');
+
+%subplot(3,1,3);
+plot(x, tumorNCorr, 'color', 'r'); hold on;
+plot(x, healthyNCorr, 'color', 'b');
+title('Normalized, Corrected n=20');
