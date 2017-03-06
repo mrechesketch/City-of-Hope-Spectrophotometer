@@ -76,10 +76,7 @@ classdef DataSet
                 transformed(starts:ends) = transform;
             end
         end
-        
-        % filters data for a parameter in the log
-        function [filtered, titles] = logFilter(DS, data, key, value)
-        end
+    
             
        
             
