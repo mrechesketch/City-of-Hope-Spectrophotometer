@@ -14,8 +14,8 @@ wavenumbers = ds.x;
 
 % subset the transects
 
-transect1 = ds.normCorr(1:end, 13:24); %transect1 is samples 13-24
-transect2 = ds.normCorr(1:end, 25:34); %transect2 is samples 25-34
+transect1 = normCorr(1:end, 13:24); %transect1 is samples 13-24
+transect2 = normCorr(1:end, 25:34); %transect2 is samples 25-34
 
 % Spatial offsets hardcoded
 offsets1 = [151 149 147 145 143 141 139 137 135 133 131];
