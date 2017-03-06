@@ -9,14 +9,16 @@ classdef DataSet
         % dimesions
         height 
         width
-        % paramters for process functions
-        polyOrder = 7
+        %log and header
+        log
+        header
+   
     end
     
     methods
         
         % construct it on its string representation
-        function DS = DataSet(dataStr)
+        function DS = DataSet(dataStr, logStr, headerStr)
             % titles first
             DS.titles = dataStr(1,2:end);
             % then convert strings to numbers
@@ -31,8 +33,10 @@ classdef DataSet
             DS.data = xAndData(1:end,2:end);
             % get height and width of data
             [DS.height, DS.width] = size(DS.data);
-            %test
-            DS.normVector([1,1]);
+            % save log and header
+            DS.log = logStr;
+            DS.header = headerStr;
+            
             
         end
         
@@ -72,6 +76,11 @@ classdef DataSet
                 transformed(starts:ends) = transform;
             end
         end
+        
+        % filters data for a parameter in the log
+        function [filtered, titles] = logFilter(DS, data, key, value)
+        end
+            
        
             
     end

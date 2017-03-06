@@ -13,7 +13,7 @@ classdef IndexCrawler
         headerIndex = 5
         
         % variable
-        dateRow
+        dateRows = []
         date
  
         
@@ -23,44 +23,50 @@ classdef IndexCrawler
         % constructor for one date
         function IC = IndexCrawler(date)
                       
-            IC.dateRow = 2;
             IC.date = date;
            
-            indexSheetSize = size(IC.indexSheet);
-            while ~strcmp(IC.indexSheet{IC.dateRow},date)
-                IC.dateRow = 1 + IC.dateRow;
-                if IC.dateRow > indexSheetSize(1)
-                    disp('Date invalid');
-                    IC.dateRow = 0;
-                    IC.date = 'invalid';
-                    break
+            [height, ~] = size(IC.indexSheet);
+            for i =1:height
+                if strcmp(IC.indexSheet{i}, date)
+                    % append the index i to date rows
+                    IC.dateRows = [IC.dateRows i];
                 end
             end
+            if isequal(IC.dateRows, [])
+                disp('Date not found')
+                IC.date = 'invalid';
+            end
+                
+
         end
         
         
         
         % this is the heavy lifter for accessing the sheet and crawling!
-        function logHeadOrData = GetAtIndex(IC, index)
+        function logHeadOrData = getAtIndex(IC, index)
             %GETATINDEX - gets log, header or header from a certain date
-            logHeadOrData = GetGoogleSpreadsheet(IC.indexSheet{IC.dateRow, index});
+            % hacky fix only first element relevant (for meow)
+            dateRow = IC.dateRows(1);
+            logHeadOrData = GetGoogleSpreadsheet(IC.indexSheet{dateRow, index});
         end
         
         % wrapper functions for above.. cells of strings
         function data = getDataStr(IC)
-            data = IC.GetAtIndex(IC.dataIndex);
+            data = IC.getAtIndex(IC.dataIndex);
         end
-        function header = GetHeader(IC)
-            header = IC.GetAtIndex(IC.headerIndex);
+        function header = getHeader(IC)
+            header = IC.getAtIndex(IC.headerIndex);
         end
-        function log = GetLog(IC)
-            log = IC.GetAtIndex(IC.logIndex);
+        function log = getLog(IC)
+            log = IC.getAtIndex(IC.logIndex);
         end
 
         % get a data set object
         function DS = getDataSet(IC)
             dataStr = IC.getDataStr();
-            DS = DataSet(dataStr);
+            logStr = IC.getLog();
+            headerStr = IC.getHeader();
+            DS = DataSet(dataStr, logStr, headerStr);
         end
         
         
