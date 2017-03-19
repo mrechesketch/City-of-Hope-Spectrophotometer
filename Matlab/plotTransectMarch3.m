@@ -9,6 +9,7 @@ ds = ic.getDataSet();
 [corr, cfactors] = ds.applyProcess(ds.data, 'corr');
 [norm, nfactors] = ds.applyProcess(ds.data, 'norm');
 [normCorr, cnfactors] = ds.applyProcess(corr, 'norm');
+[firstDeriv , dfactors] = ds.applyProcess(normCorr, '1deriv');
 
 wavenumbers = ds.x;
 

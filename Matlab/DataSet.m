@@ -46,11 +46,39 @@ classdef DataSet
             normVec = vector./factor;
         end
         
-        % Subtract a n order polynomial from a vector
+        % Correct for flourescence using msbackadj
         function [corr, factor] = corr(DS, vector)
             corr = msbackadj(DS.x, vector);
             corrSub = vector-corr;
             factor = sum(corrSub);
+        end
+        
+        % Returns a vector of length n-1 for derivative
+        function [deriv, factor] = deriv(DS, vector, order)
+            if order > 0
+                % get differences
+                stepSizes = diff(DS.x);
+                yDiff = diff(vector);
+                % set first and last
+                vector(1) = yDiff(1) / stepSizes(1);
+                vector(end) = yDiff(end) / stepSizes(end);
+                % loop the rest considering both sides of i
+                for i = 2:length(vector)-1
+                    deltaY = yDiff(i-1)+yDiff(i);
+                    deltaX = stepSizes(i-1)+stepSizes(i);
+                    vector(i) = deltaY / deltaX;
+                end
+                % recursive call
+                DS.deriv(vector, order-1);
+            end
+            
+            
+            deriv = vector;
+            factor = 0;
+            
+            
+            
+            
         end
         
         % function that act on any data set
@@ -71,9 +99,13 @@ classdef DataSet
                 if strcmp(type, 'norm')
                     [transform, factor] = DS.normVector(currentVector);
                 end
+                if contains(type, 'deriv')
+                    order = str2num( replace(type, 'deriv', '') );
+                    [transform, factor] = DS.deriv(currentVector, order);
                 % set the values
                 factors(i) = factor;
                 transformed(starts:ends) = transform;
+                end
             end
         end
     
