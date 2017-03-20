@@ -96,20 +96,21 @@ classdef DataSet
                 ends = h*i;
                 currentVector = transformed(starts:ends);
                 % make the choice on type
-                if strcmp(type, 'corr')
+                if contains(type, 'corr')
                     [transform, factor] = DS.corr(currentVector');
                 end
-                if strcmp(type, 'norm')
+                if contains(type, 'norm')
                     [transform, factor] = DS.normVector(currentVector);
                 end
                 if contains(type, 'deriv')
                     order = str2num( replace(type, 'deriv', '') );
                     [transform, factor] = DS.deriv(currentVector, order);
+                end
                 % set the values
                 factors(i) = factor;
                 transformed(starts:ends) = transform;
-                end
             end
+            isequal(transformed, data);
         end
     
             
