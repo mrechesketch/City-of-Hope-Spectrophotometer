@@ -10,15 +10,17 @@ classdef DataSet
         height 
         width
         %log and header
-        log
-        header
+        logID
+        headerID
+        % linked list!
+        next 
    
     end
     
     methods
         
         % construct it on its string representation
-        function DS = DataSet(dataStr, logStr, headerStr)
+        function DS = DataSet(dataStr, logID, headerID, dataSetNode)
             % titles first
             DS.titles = dataStr(1,2:end);
             % then convert strings to numbers
@@ -33,9 +35,10 @@ classdef DataSet
             DS.data = xAndData(1:end,2:end);
             % get height and width of data
             [DS.height, DS.width] = size(DS.data);
-            % save log and header
-            DS.log = logStr;
-            DS.header = headerStr;
+            % save other parameters
+            DS.logID = logID;
+            DS.headerID = headerID;
+            DS.next = dataSetNode;
             
             
         end

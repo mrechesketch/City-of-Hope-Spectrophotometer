@@ -46,7 +46,7 @@ classdef IndexCrawler
         function logHeadOrData = getAtIndex(IC, index)
             %GETATINDEX - gets log, header or header from a certain date
             % hacky fix only first element relevant (for meow)
-            dateRow = IC.dateRows(1);
+            dateRow = IC.dateRows(2);
             logHeadOrData = GetGoogleSpreadsheet(IC.indexSheet{dateRow, index});
         end
         
@@ -66,7 +66,7 @@ classdef IndexCrawler
             dataStr = IC.getDataStr();
             logStr = IC.getLog();
             headerStr = IC.getHeader();
-            DS = DataSet(dataStr, logStr, headerStr);
+            DS = DataSet(dataStr, logStr, headerStr, 'null');
         end
         
         
