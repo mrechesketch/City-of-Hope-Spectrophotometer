@@ -2,8 +2,8 @@
 
 %% get the ic object and gather information
 
-ic = IndexCrawler('2/24/2017'); % day 3
-ds = ic.getDataSet();
+%ic = IndexCrawler('2/24/2017'); % day 3
+ds = getDataSet('2/24/2017');
 
 % apply transforms
 [corr, cfactors] = ds.applyProcess(ds.data, 'corr');
@@ -90,5 +90,4 @@ for i = 1:9
     hold on
 end
 xlim([175 3200])
-
 

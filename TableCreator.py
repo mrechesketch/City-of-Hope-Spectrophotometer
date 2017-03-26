@@ -157,5 +157,5 @@ class TableCreator:
         return
 
 d = TableCreator(785)
-d.addLocation("/Users/alexanderechevarria/Desktop/day3")
-d.createTables("Feb24")
+d.addLocation("/Users/alexanderechevarria/Desktop/Spring 2017/Clinic/temp")
+d.createTables("Calibration")
