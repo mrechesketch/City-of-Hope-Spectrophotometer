@@ -9,14 +9,18 @@ classdef DataSet
         % dimesions
         height 
         width
-        % paramters for process functions
-        polyOrder = 7
+        %log and header
+        logID
+        headerID
+        % linked list!
+        next 
+   
     end
     
     methods
         
         % construct it on its string representation
-        function DS = DataSet(dataStr)
+        function DS = DataSet(dataStr, logID, headerID, dataSetNode)
             % titles first
             DS.titles = dataStr(1,2:end);
             % then convert strings to numbers
@@ -31,8 +35,11 @@ classdef DataSet
             DS.data = xAndData(1:end,2:end);
             % get height and width of data
             [DS.height, DS.width] = size(DS.data);
-            %test
-            DS.normVector([1,1]);
+            % save other parameters
+            DS.logID = logID;
+            DS.headerID = headerID;
+            DS.next = dataSetNode;
+            
             
         end
         
@@ -42,11 +49,39 @@ classdef DataSet
             normVec = vector./factor;
         end
         
-        % Subtract a n order polynomial from a vector
+        % Correct for flourescence using msbackadj
         function [corr, factor] = corr(DS, vector)
             corr = msbackadj(DS.x, vector);
             corrSub = vector-corr;
             factor = sum(corrSub);
+        end
+        
+        % Returns a vector of length n-1 for derivative
+        function [deriv, factor] = deriv(DS, vector, order)
+            if order > 0
+                % get differences
+                stepSizes = diff(DS.x);
+                yDiff = diff(vector);
+                % set first and last
+                vector(1) = yDiff(1) / stepSizes(1);
+                vector(end) = yDiff(end) / stepSizes(end);
+                % loop the rest considering both sides of i
+                for i = 2:length(vector)-1
+                    deltaY = yDiff(i-1)+yDiff(i);
+                    deltaX = stepSizes(i-1)+stepSizes(i);
+                    vector(i) = deltaY / deltaX;
+                end
+                % recursive call
+                DS.deriv(vector, order-1);
+            end
+            
+            
+            deriv = vector;
+            factor = 0;
+            
+            
+            
+            
         end
         
         % function that act on any data set
@@ -61,17 +96,24 @@ classdef DataSet
                 ends = h*i;
                 currentVector = transformed(starts:ends);
                 % make the choice on type
-                if strcmp(type, 'corr')
+                if contains(type, 'corr')
                     [transform, factor] = DS.corr(currentVector');
                 end
-                if strcmp(type, 'norm')
+                if contains(type, 'norm')
                     [transform, factor] = DS.normVector(currentVector);
+                end
+                if contains(type, 'deriv')
+                    order = str2num( replace(type, 'deriv', '') );
+                    [transform, factor] = DS.deriv(currentVector, order);
                 end
                 % set the values
                 factors(i) = factor;
                 transformed(starts:ends) = transform;
             end
+            isequal(transformed, data);
         end
+    
+            
        
             
     end
