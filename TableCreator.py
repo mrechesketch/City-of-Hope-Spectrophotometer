@@ -158,4 +158,4 @@ class TableCreator:
 
 d = TableCreator(785)
 d.addLocation("/Users/alexanderechevarria/Desktop/Spring 2017/Clinic/temp")
-d.createTables("Calibration")
+d.createTables("April7th")
