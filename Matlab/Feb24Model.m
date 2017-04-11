@@ -18,10 +18,16 @@ wavenumbers = ds.x;
 %normCorr = norm;   %normalized only
 %normCorr = corr;   %corrected only
 
-transect1 = normCorr(1:end, 5:15); %transect1 
-transect2 = normCorr(1:end, 16:23); %transect2 
-transect3 = normCorr(1:end, 24:28); %transect3
-transect4 = normCorr(1:end, 29:37); %transect4 
+%note that indexing samples is weird cuz the numbering is
+%'sample1,10,11,etc.'
+transect1 = normCorr(1:end, 23); %transect1 (actually uses sample3 not sample5)
+transect1 = [transect1, normCorr(1:end, 35:38)]; %transect1 
+transect1 = [transect1, normCorr(1:end, 2:7)]; %transect1 
+transect2 = normCorr(1:end, 8:11); %transect2 
+transect2 = [transect2, normCorr(1:end, 13:16)]; %transect2
+transect3 = normCorr(1:end, 17:21); %transect3
+transect4 = normCorr(1:end, 22); %transect4 
+transect4 = [transect4, normCorr(1:end, 24:31)]; %transect2
 
 % Spatial offsets hardcoded
 offsets1 = [123.3 124.5 126.6 128.2 130.5 132.1 133.9 135 136.4 138.6 139.3];
@@ -41,7 +47,7 @@ scale = 0.0018;
 %transect 1
 subplot(2,2,1)
 hold on
-for i = 1:10
+for i = 1:11
     %scale by distance
     transect1(:,i) = transect1(:,i) + (offsets1(i) - offsets1(1))*scale;
     plot(wavenumbers, transect1(:,i))
