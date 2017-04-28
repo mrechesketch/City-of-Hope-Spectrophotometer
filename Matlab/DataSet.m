@@ -109,6 +109,20 @@ classdef DataSet
             end
             isequal(transformed, data);
         end
+        
+        % wrappers for apply process
+        function transformed = getNorm(DS)
+            transformed = DS.applyProcess(DS.data, 'norm');
+        end
+        
+        function transformed = getCorr(DS)
+            transformed = DS.applyProcess(DS.data, 'corr');
+        end
+        
+        function transformed = getNormCorr(DS)
+            transformed = DS.getCorr();
+            transformed = DS.applyProcess(transformed, 'norm');
+        end
     
             
        
