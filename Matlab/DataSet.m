@@ -75,14 +75,11 @@ classdef DataSet
                 DS.deriv(vector, order-1);
             end
             
-            
             deriv = vector;
             factor = 0;
-            
-            
-            
-            
+                                   
         end
+        
         
         % function that act on any data set
             % input: data set and the type of transformation
@@ -111,6 +108,20 @@ classdef DataSet
                 transformed(starts:ends) = transform;
             end
             isequal(transformed, data);
+        end
+        
+        % wrappers for apply process
+        function transformed = getNorm(DS)
+            transformed = DS.applyProcess(DS.data, 'norm');
+        end
+        
+        function transformed = getCorr(DS)
+            transformed = DS.applyProcess(DS.data, 'corr');
+        end
+        
+        function transformed = getNormCorr(DS)
+            transformed = DS.getCorr();
+            transformed = DS.applyProcess(transformed, 'norm');
         end
     
             
