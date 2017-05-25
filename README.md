@@ -1,7 +1,7 @@
 # City-of-Hope-Spectrophotometer
 2016-2017 Harvey Mudd College Clinic Project
 
-Contributors: Sarah Anderson, Alex Echevarria, Nathan Miller, Connor Stashko
+Contributors: Sarah Anderson, Alex Echevarria, Nathan Miller, Connor Stashko, Willie Zuniga
 
 Most of this project is written in MATLAB however there is one Python file. 
 
