@@ -1,8 +1,5 @@
-%% WHOLE DATA PROCESSING SCRIPT
-% This finds the 15 most meaningful peaks 
-% based on known spectra for healthy and malignant tissue. Then, the 
-% 15 peaks are integrated for each imported spectra for post-processing 
-% through PCA and LDA
+%% This script plots differences between 1064 and 785
+%% as well as showing norm and corr processes
 
 
 % close all figures
